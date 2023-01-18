@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <title></title>
+</head>
+<body>
+    <p><a href="logout">Выйти</a></p>
+
+    <div id="header"></div><br />
+
+    <div id="inputForm">
+        <input type="text" id="message" />
+        <input type="button" id="sendButton" value="Send" />
+    </div>
+
+    <div id="whosTyping"></div>
+
+    <div id="messages" />
+
+    <script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat")
+            .build();
+
+        document.getElementById("sendButton").addEventListener("click", function (e) {
+            let message = document.getElementById("message").value;
+
+            hubConnection.invoke("send", message);
+
+            document.getElementById("message").value = "";
+        });
+
+        hubConnection.on("messageReceived", function (time, userName, message) {
+            let messages = document.getElementById("messages");
+
+            let element = document.createElement("p");
+            element.appendChild(document.createTextNode(`${time} ${userName}: ${message}`));
+
+            let firstElement = messages.firstChild;
+            messages.insertBefore(element, firstElement);
+        });
+
+        document.getElementById("message").addEventListener("keydown", function (e) {
+            hubConnection.invoke("type");
+        });
+
+        let timerId;
+
+        hubConnection.on("type", function (userName) {
+            clearTimeout(timerId);
+            document.getElementById("whosTyping").innerHTML = userName + " is typing...";
+
+            timerId = setTimeout(() => document.getElementById("whosTyping").innerHTML = "", 1200);
+        });
+
+        hubConnection.on("action", function (message) {
+            let messages = document.getElementById("messages");
+
+            let element = document.createElement("p");
+            element.appendChild(document.createTextNode(message));
+
+            let firstElement = messages.firstChild;
+            messages.insertBefore(element, firstElement);     
+        });
+
+        hubConnection.start();
+    </script>
+</body>
+</html>

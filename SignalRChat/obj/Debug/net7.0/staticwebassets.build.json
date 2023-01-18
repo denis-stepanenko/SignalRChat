@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "57cxGSfz/qiqLJyoDcawB73/TRlLp/pD/2Ij5naB4MM=",
+  "Source": "SignalRChat",
+  "BasePath": "_content/SignalRChat",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SignalRChat\\wwwroot",
+      "Source": "SignalRChat",
+      "ContentRoot": "C:\\Users\\Денис\\source\\repos\\SignalRChat\\SignalRChat\\wwwroot\\",
+      "BasePath": "_content/SignalRChat",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
